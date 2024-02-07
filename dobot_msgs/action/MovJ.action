@@ -1,0 +1,5 @@
+dobot_msgs/ToolVectorActual pose
+---
+bool result
+---
+dobot_msgs/ToolVectorActual current_pose

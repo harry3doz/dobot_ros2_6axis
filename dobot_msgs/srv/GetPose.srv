@@ -1,5 +1,4 @@
-string user
-string tool
+int32[] user
+int32[] tool
 ---
-string pose
 int32 res

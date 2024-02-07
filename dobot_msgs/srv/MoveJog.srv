@@ -1,4 +1,4 @@
-string axis_id
-string[] param_value
+string axisID
+string[] paramValue
 ---
 int32 res

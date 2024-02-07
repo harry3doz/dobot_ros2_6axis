@@ -1,4 +1,5 @@
 string trace_name
-string[] param_value
+int32 const_val
+int32 cart
 ---
 int32 res
