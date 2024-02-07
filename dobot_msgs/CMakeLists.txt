@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(dobot_bringup)
+project(dobot_msgs)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
@@ -7,25 +7,16 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
-find_package(dobot_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
 
-include_directories(
-  include
-)
+file(GLOB msg_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} msg/*.msg)
+file(GLOB srv_files RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} srv/*.srv)
 
-#add_executable(${PROJECT_NAME}
-#)
-
-#add_dependencies(${PROJECT_NAME}
-#)
-
-#target_link_libraries(${PROJECT_NAME}
-#)
-
-install(
-  DIRECTORY launch
-  DESTINATION share/${PROJECT_NAME}
+rosidl_generate_interfaces(${PROJECT_NAME}
+  ${msg_files}
+  ${srv_files}
+  DEPENDENCIES std_msgs
 )
 
 if(BUILD_TESTING)
