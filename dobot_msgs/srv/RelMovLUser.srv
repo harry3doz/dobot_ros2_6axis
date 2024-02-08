@@ -5,7 +5,7 @@ float64 rx
 float64 ry
 float64 rz
 int32 user
-string[] paramValue
+string[] param_value
 
 ---
 

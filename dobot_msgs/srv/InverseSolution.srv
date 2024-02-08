@@ -6,7 +6,7 @@ float64 offset5
 float64 offset6
 int32 user
 int32 tool
-int32 isJointNear
-string JointNear
+int32 is_joint_near
+string joint_near
 ---
 int32 res
