@@ -8,36 +8,62 @@ endif()
 # find dependencies
 find_package(ament_cmake_auto REQUIRED)
 ament_auto_find_build_dependencies()
+#find_package(ament_cmake REQUIRED)
 #find_package(rclcpp REQUIRED)
+#find_package(rclcpp_action REQUIRED)
+#find_package(rclcpp_components REQUIRED)
+#find_package(geometry_msgs REQUIRED)
+#find_package(sensor_msgs REQUIRED)
+#find_package(control_msgs REQUIRED)
 #find_package(dobot_msgs REQUIRED)
+
+#add_executable(${PROJECT_NAME}
+#  src/cr5_robot.cpp
+#  src/main.cpp 
+#  src/tcp_socket.cpp 
+#)
 
 include_directories(
   include
 )
 
-add_executable(dobot_node
+add_library(dobot_action_server SHARED
   src/cr5_robot.cpp
-  src/main.cpp
-  src/tcp_socket.cpp
+  src/main.cpp 
+  src/tcp_socket.cpp 
 )
 
-ament_target_dependencies(dobot_node
-  rclcpp
-  rclcpp_action
-  std_srvs
-  geometry_msgs
-  sensor_msgs
-  control_msgs
-  dobot_msgs
+target_include_directories(dobot_action_server
+  PRIVATE
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+  $<INSTALL_INTERFACE:include>
 )
 
-target_include_directories(dobot_node
-  PRIVATE include
+target_compile_definitions(dobot_action_server
+  PRIVATE "DOBOT_BRINGUP_PUBLIC"
+)
+
+ament_target_dependencies(dobot_action_server
+  "std_srvs"
+  "sensor_msgs"
+  "control_msgs"
+  "geometry_msgs"
+  "dobot_msgs"
+  "rclcpp"
+  "rclcpp_action"
+  "rclcpp_components"
+)
+
+rclcpp_components_register_node(dobot_action_server
+  PLUGIN "dobot_bringup::CR5Robot"
+  EXECUTABLE cr5robot_action_server
 )
 
 install(
-  TARGETS dobot_node
-  DESTINATION lib/${PROJECT_NAME}
+  TARGETS dobot_action_server
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
 )
 
 install(

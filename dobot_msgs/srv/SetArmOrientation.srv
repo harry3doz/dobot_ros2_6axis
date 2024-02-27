@@ -1,6 +1,6 @@
-int32 l_or_r
-int32 u_or_d
-int32 f_or_n
-int32 config6
+int32 LorR
+int32 UorD
+int32 ForN
+int32 Config6
 ---
 int32 res

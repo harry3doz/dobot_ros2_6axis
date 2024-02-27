@@ -9,40 +9,38 @@
  ***********************************************************************************************************************
  */
 
-#include <rclcpp/rclcpp.hpp>
-#include "cr5_robot.hpp"
-#include <sensor_msgs/msg/joint_state.hpp>
-#include "dobot_msgs/msg/tool_vector_actual.hpp"
-#include <rclcpp/time.hpp>
-#include <memory>
 #include <iostream>
+#include <memory>
 #include <string>
 #include <cstdio>
 #include <cstdlib>
 
+#include <rclcpp/rclcpp.hpp>
+#include <rclcpp/time.hpp>
+#include <sensor_msgs/msg/joint_state.hpp>
+#include "dobot_msgs/msg/tool_vector_actual.hpp"
+#include "cr5_robot.hpp"
+
 using namespace std;
 int main(int argc, char* argv[])
 {
+    const char* robot_type = getenv("DOBOT_TYPE");
+    string robot_type_str = (robot_type == nullptr ? "cr5" : robot_type) + "Robot";
     rclcpp::init(argc, argv);
-    auto private_node = std::make_shared<rclcpp::Node>("CR5Robot");
 
     try
     {
-        rclcpp::init(argc, argv);
-        auto private_node = std::make_shared<rclcpp::Node>("CR5Robot");
+        auto private_node = std::make_shared<rclcpp::Node>("cr5_robot")
 
         sensor_msgs::msg::JointState joint_state_msg;
 
         auto joint_state_pub = private_node->create_publisher<sensor_msgs::msg::JointState>("joint_states", 100);
+
         dobot_msgs::msg::RobotStatus robot_status_msg;
-        auto robot_status_pub = private_node->create_publisher<dobot_msgs::msg::RobotStatus>("RobotStatus", 100);
+        auto robot_status_pub = private_node->create_publisher<dobot_msgs::msg::RobotStatus>("robot_status", 100);
 
         dobot_msgs::msg::ToolVectorActual tool_vector_actual_msg;
-        auto tool_vector_pub = private_node->create_publisher<dobot_msgs::msg::ToolVectorActual>("ToolVectorActual", 100);
-            std::string z ="/";
-            std::string a = getenv("DOBOT_TYPE");
-            std::string b = "_robot/joint_controller/follow_joint_trajectory";
-            std::string ss = z + a+ b ;
+        auto tool_vector_pub = private_node->create_publisher<dobot_msgs::msg::ToolVectorActual>("tool_vector_actual", 100)
 
         for (uint32_t i = 0; i < 6; i++)
         {
@@ -50,7 +48,7 @@ int main(int argc, char* argv[])
             joint_state_msg.name.push_back(std::string("joint") + std::to_string(i + 1));
         }
 
-        CR5Robot robot(private_node, ss);
+        CR5Robot robot(private_node, "joint_controller/follow_joint_trajectory");
 
         double rate_value = private_node->declare_parameter("JointStatePublishRate", 10.0);
 
@@ -63,7 +61,7 @@ int main(int argc, char* argv[])
             // publish joint state
             //
             robot.getJointState(position);
-            joint_state_msg.header.stamp = rclcpp::Clock().now();
+            joint_state_msg.header.stamp = rclcpp::Clock()::now();
             joint_state_msg.header.frame_id = "dummy_link";
             for (uint32_t i = 0; i < 6; i++)
                 joint_state_msg.position[i] = position[i];
@@ -86,7 +84,7 @@ int main(int argc, char* argv[])
             robot_status_msg.is_connected = robot.isConnected();
             robot_status_pub->publish(robot_status_msg);
 
-            rclcpp::spin_some(private_node);
+            rclcpp::spin_once(private_node);
             rate.sleep();
         }
     }

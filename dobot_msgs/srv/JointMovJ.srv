@@ -4,6 +4,6 @@ float64 j3
 float64 j4
 float64 j5
 float64 j6
-string[] param_value
+string[] paramValue
 ---
 int32 res

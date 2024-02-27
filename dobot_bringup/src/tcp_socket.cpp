@@ -20,7 +20,6 @@
 #include <sys/select.h>
 #include "tcp_socket.hpp"
 
-
 TcpClient::TcpClient(std::string ip, uint16_t port) : fd_(-1), port_(port), ip_(std::move(ip)), is_connected_(false)
 {
 }
@@ -83,6 +82,7 @@ void TcpClient::tcpSend(const void* buf, uint32_t len)
     if (!is_connected_)
         throw TcpClientException("tcp is disconnected");
 
+    RCLCPP_INFO(rclcpp::get_logger("tcp_socket"), "send : %s", (const char*)buf);
     const auto* tmp = (const uint8_t*)buf;
     while (len)
     {

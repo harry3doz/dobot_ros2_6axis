@@ -2,7 +2,7 @@
 int32 index
 int32 addr
 int32 count
-string[] val_type
+string[] valtype
 ---
 int32 res
 int32 index

@@ -1,5 +1,5 @@
 float64 offset
-string[] param_value
+string[] paramValue
 ---
 
 int32 res

@@ -11,7 +11,7 @@ float64 z2
 float64 a2
 float64 b2
 float64 c2
-string[] param_value
+string[] paramValue
 ---
 
 int32 res

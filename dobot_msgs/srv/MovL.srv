@@ -4,6 +4,6 @@ float64 z
 float64 a
 float64 b
 float64 c
-string[] param_value
+string[] paramValue
 ---
 int32 res
